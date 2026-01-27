@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+Departments
+{% endblock %}
+
+
+{% block content %}
+<h1 class=' flex justify-center text-4xl font-bold' >Our Departments</h1>
+<br>
+<hr>
+{% for d in dept %}
+<div class=' mx-auto w-50 bg-gray-300 text-center text-black p-3 my-3 border border-warning border-rounded'>
+    <h1 class='text-2xl font-semibold'>{{d.dep_name}}</h1>
+    <br>
+    <h3>{{d.dep_description}}</h3>
+</div>
+{% endfor %}
+{% endblock %}
