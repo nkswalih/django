@@ -1,41 +1,177 @@
 {% extends "base.html" %}
-
-{% block title %}
-Home
-{% endblock %}
-
-
-{% block content %}
 {% load static %}
 
-<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-  <div class="carousel-inner">
-    <div class="carousel-item active" data-bs-interval="10000">
-      <img src="{% static '/images/car1.jpg' %}" class="d-block w-100" alt="...">
+{% block title %}SalvaMedic - Innovation Clinic{% endblock %}
+
+{% block content %}
+<!-- Custom Styles to match SalvaMedic UI -->
+<style>
+    :root {
+        --primary-blue: #1a4b9c;
+        --soft-bg: #f8fafc;
+        --white-glass: rgba(255, 255, 255, 0.8);
+    }
+
+    body { font-family: 'Inter', sans-serif; background-color: white; overflow-x: hidden; }
+
+    /* Hero Section Styles */
+    .hero-section { position: relative; padding: 100px 0; background: linear-gradient(90deg, #fff 50%, #1a4b9c 50%); min-height: 80vh; display: flex; align-items: center; }
+    .hero-title { font-size: 5rem; font-weight: 800; line-height: 0.9; color: #111; }
+    .btn-pill { border-radius: 50px; padding: 12px 30px; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; }
+    .floating-tag { position: absolute; background: white; padding: 8px 20px; border-radius: 50px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-weight: 500; z-index: 10; }
+    .btn-primary {
+      --bs-btn-bg: var(--primary-blue);
+      --bs-btn-border-color: var(--primary-blue);
+      --bs-btn-hover-bg: #153e82;
+      --bs-btn-hover-border-color: #153e82;
+    }
+
+    /* TEXT */
+    .text-primary {
+      color: var(--primary-blue) !important;
+    }
+
+    /* Services Grid */
+    .service-card { border: none; border-radius: 30px; padding: 40px; transition: 0.3s; height: 100%; position: relative; overflow: hidden; background: #f1f5f9; }
+    .service-card.blue { background: var(--primary-blue); color: white; }
+    .card-number { font-size: 4rem; font-weight: 700; opacity: 0.1; position: absolute; top: 10px; left: 20px; }
+    .bg-primary {
+      background-color: var(--primary-blue) !important;
+    }
+
+    /* Doctors Scroll Section */
+    .scroll-container { display: flex; overflow-x: auto; gap: 30px; padding: 20px 0; scrollbar-width: none; }
+    .scroll-container::-webkit-scrollbar { display: none; }
+    .doctor-card { min-width: 350px; border-radius: 30px; overflow: hidden; position: relative; }
+    .doctor-info { position: absolute; bottom: 20px; left: 20px; right: 20px; background: white; border-radius: 20px; padding: 20px; }
+
+    /* Rounded Blue Sections */
+    .rounded-section { border-radius: 50px; background: #f8fafc; padding: 80px 40px; margin: 50px 0; }
+</style>
+
+<!-- SECTION 1: HERO -->
+<section class="hero-section rounded-section shadow-sm">
+    <div class="container ">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="hero-title">Innovation<br>Clinic</h1>
+                <p class="my-4 text-secondary w-75">We treat not only symptoms - <strong>we care</strong> about each person.</p>
+                <a href="{% url 'doctors' %}" class="btn btn-primary btn-pill rounded-2xl">Find Doctor <i class="bi bi-person-circle"></i></a>
+                
+                <!-- Stats Overlay -->
+                <div class="d-flex gap-4 mt-5">
+                    <div><h3>10+</h3><small>years of exp</small></div>
+                    <div><h3>20+</h3><small>qualified docs</small></div>
+                    <div><h3>100%</h3><small>diagnostics</small></div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 position-relative text-center">
+                <!-- Floating Tags -->
+                <div class="floating-tag" style="top: 20%; left: -10%;">Reliability</div>
+                <div class="floating-tag" style="top: 10%; right: 10%;">Experience</div>
+                <div class="floating-tag" style="bottom: 20%; right: 5%;">Professional</div>
+                
+                <!-- You can use one of your doctor images here -->
+                {% if doctors %}
+                    <img src="{{ doctors.4.doc_image.url }}" class="img-fluid rounded-2xl" style="max-height: 700px;" alt="Doctor">
+                {% else %}
+                    <img src="https://via.placeholder.com/600x800" class="img-fluid" alt="Placeholder">
+                {% endif %}
+            </div>
+        </div>
     </div>
-    <div class="carousel-item" data-bs-interval="2000">
-      <img src="{% static '/images/car2.jpg' %}" class="d-block w-100" alt="...">
-      
+</section>
+
+<!-- SECTION 2: ABOUT / QUOTE -->
+<section class="container text-center my-5 py-5 rounded-section shadow-sm">
+    <span class="text-secondary small">SalvaMedic</span>
+    <h2 class="display-5 fw-bold mt-3 px-lg-5">
+        We combine innovative <span class="text-primary">technology</span> with a human approach to make every patient feel <span class="text-dark">confident and calm.</span>
+    </h2>
+    <a href="{% url 'about' %}" class="btn btn-primary btn-pill mt-4">More about us <i class="bi bi-arrow-right"></i></a>
+</section>
+
+<!-- SECTION 3: SERVICES (DEPARTMENTS) -->
+<section class="container py-5">
+    <div class="d-flex justify-content-between align-items-end mb-5">
+        <h2 class="display-6 fw-bold">Our medical<br>services</h2>
+        <a href="#" class="text-primary text-decoration-none">See all services <i class="bi bi-arrow-up-right"></i></a>
     </div>
-    <div class="carousel-item">
-      <img src="{% static '/images/car3.jpg' %}" class="d-block w-100" alt="...">
-      
+
+    <div class="row g-4">
+        {% for dep in departments %}
+        <div class="col-md-4">
+            <!-- Alternating colors based on loop -->
+            <div class="service-card {% if forloop.counter == 2 or forloop.counter == 4 %}blue{% endif %}">
+                <span class="card-number">0{{ forloop.counter }}</span>
+                <h4 class="fw-bold">{{ dep.dep_name }}</h4>
+                <p class="small opacity-75">{{ dep.dep_description|truncatewords:15 }}</p>
+                <div class="d-flex justify-content-between mt-4 align-items-center">
+                    <a href="{% url 'booking' %}" class="btn {% if forloop.counter == 2 or forloop.counter == 4 %}btn-outline-light{% else %}btn-outline-primary{% endif %} btn-sm rounded-pill">Make appointment</a>
+                    <span class="fw-bold">Price</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-  </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
+</section>
+
+<!-- SECTION 4: MEET THE DOCTORS (SCROLL) -->
+<section class="container py-5">
+    <div class="row align-items-center mb-4">
+        <div class="col-md-4">
+            <h2 class="display-6 fw-bold">Meet the people who care</h2>
+            <p class="text-muted">Our team brings together expertise, empathy, and a deep passion for helping others.</p>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-dark rounded-circle px-3 py-2"><i class="bi bi-arrow-left"></i></button>
+                <button class="btn btn-primary rounded-circle px-3 py-2"><i class="bi bi-arrow-right"></i></button>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="scroll-container">
+                {% for doc in doctors %}
+                <div class="doctor-card">
+                    <img src="{{ doc.doc_image.url }}" class="w-100" style="height: 450px; object-fit: cover;" alt="{{ doc.doc_name }}">
+                    <div class="doctor-info shadow-sm">
+                        <h5 class="mb-1 fw-bold">{{ doc.doc_name }}</h5>
+                        <p class="small text-primary mb-0">{{ doc.doc_spec }} - {{ doc.dep_name.dep_name }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 5: WHY CHOOSE US -->
+<section class="container rounded-section bg-primary text-white">
+    <div class="row align-items-center">
+        <div class="col-lg-5 text-center">
+            <img src="{% static '/images/dr1.jpg' %}" class="img-fluid rounded-4" alt="Doctors">
+        </div>
+        <div class="col-lg-7 p-lg-5">
+            <h2 class="display-5 fw-bold mb-4">Why choose us</h2>
+            <div class="row g-4">
+                <div class="col-6">
+                    <h3 class="fw-bold">10+</h3>
+                    <p class="small opacity-75">Years of experience in modern medicine</p>
+                </div>
+                <div class="col-6">
+                    <h3 class="fw-bold">15+</h3>
+                    <p class="small opacity-75">Areas of specialized medicine</p>
+                </div>
+                <div class="col-6">
+                    <h3 class="fw-bold">95%</h3>
+                    <p class="small opacity-75">Satisfied patients per year</p>
+                </div>
+                <div class="col-6">
+                    <h3 class="fw-bold">98%</h3>
+                    <p class="small opacity-75">Diagnostic accuracy</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 {% endblock %}
-        

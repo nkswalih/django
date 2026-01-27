@@ -28,3 +28,13 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.p_name} ({self.booked_on})"
+    
+class Contact(models.Model):
+    c_name = models.CharField(max_length=255)
+    c_email = models.EmailField(max_length=255)
+    c_sub = models.CharField()
+    c_msg = models.TextField()
+    submited_on = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.c_name} {slef.c_sub}"

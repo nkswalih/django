@@ -29,3 +29,7 @@ class BookingForm(forms.ModelForm):
             'booking_date':'Booking Date',
             'dep_name':'Department'
         }
+
+# class ContactForm(forms.ModelForm):
+#     class Meta:
+#         model = 

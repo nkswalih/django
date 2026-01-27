@@ -1,19 +1,175 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}
-Departments
-{% endblock %}
-
+{% block title %}Our Departments | SalvaMedic{% endblock %}
 
 {% block content %}
-<h1 class=' flex justify-center text-4xl font-bold' >Our Departments</h1>
-<br>
-<hr>
-{% for d in dept %}
-<div class=' mx-auto w-50 bg-gray-300 text-center text-black p-3 my-3 border border-warning border-rounded'>
-    <h1 class='text-2xl font-semibold'>{{d.dep_name}}</h1>
-    <br>
-    <h3>{{d.dep_description}}</h3>
+<style>
+    :root {
+        --salva-navy: #1a4b9c;
+        --soft-bg: #f8fafc;
+    }
+
+    body {
+        background-color: #fff;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Header Section */
+    .dept-header {
+        padding: 60px 0;
+        text-align: center;
+    }
+
+    .pill-label {
+        display: inline-block;
+        padding: 6px 20px;
+        border: 1px solid #e5e7eb;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--salva-navy);
+        text-transform: uppercase;
+        margin-bottom: 15px;
+    }
+
+    /* Grid Container */
+    .rounded-section {
+        background-color: var(--soft-bg);
+        border-radius: 50px;
+        padding: 60px 40px;
+        margin-bottom: 80px;
+    }
+
+    /* Department Card Styling */
+    .dept-card {
+        border: none;
+        border-radius: 35px;
+        padding: 40px;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: white;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dept-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+    }
+
+    /* Alternating Blue Cards */
+    .dept-card.card-blue {
+        background-color: var(--salva-navy);
+        color: white;
+    }
+
+    /* The Faded Number (01, 02...) */
+    .card-number {
+        font-size: 5rem;
+        font-weight: 800;
+        position: absolute;
+        top: -10px;
+        left: 20px;
+        opacity: 0.05;
+    }
+
+    .card-blue .card-number {
+        opacity: 0.15;
+    }
+
+    .dept-title {
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-top: 20px;
+        z-index: 1;
+    }
+
+    .dept-desc {
+        font-size: 0.95rem;
+        opacity: 0.8;
+        margin: 20px 0;
+        line-height: 1.6;
+        z-index: 1;
+    }
+
+    /* Action Links */
+    .dept-link {
+        margin-top: auto;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1;
+    }
+
+    .card-white .dept-link { color: var(--salva-navy); }
+    .card-blue .dept-link { color: white; }
+
+    .btn-pill-sm {
+        border-radius: 50px;
+        padding: 8px 20px;
+        border: 1px solid currentColor;
+        transition: 0.3s;
+    }
+
+    .btn-pill-sm:hover {
+        background: #1a4b9c;
+        color: #fff !important;
+    }
+</style>
+
+<section class="dept-header container">
+    <span class="pill-label">Specializations</span>
+    <h1 class="display-4 fw-bold">Our Departments</h1>
+    <p class="text-muted mx-auto" style="max-width: 600px;">
+        We provide a full range of medical services — from consultation to diagnosis and innovative treatments.
+    </p>
+</section>
+
+<div class="container">
+    <div class="rounded-section shadow-sm">
+        <div class="row g-4">
+            {% for d in dept %}
+            <div class="col-lg-4 col-md-6">
+                <!-- Cycle through colors: white card, blue card, white card... -->
+                <div class="dept-card shadow-sm {% cycle 'card-white' 'card-blue' %}">
+                    
+                    <!-- Formatted Number (01, 02, 03...) -->
+                    <span class="card-number">
+                        {% if forloop.counter < 10 %}0{% endif %}{{ forloop.counter }}
+                    </span>
+
+                    <h2 class="dept-title">{{ d.dep_name }}</h2>
+                    
+                    <p class="dept-desc">
+                        {{ d.dep_description|truncatewords:20 }}
+                    </p>
+
+                    <div class="dept-link">
+                        <a href="{% url 'booking' %}" class="btn-pill-sm text-inherit">Make appointment</a>
+                        <span>Price <i class="bi bi-arrow-right-short"></i></span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">No departments available at the moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
-{% endfor %}
+
+<div class="container text-center mb-5">
+    <h3 class="fw-bold mb-4">Don't see what you're looking for?</h3>
+    <a href="{% url 'contact' %}" class="btn px-5 py-3 rounded-pill text-white" style="background-color: var(--salva-navy);">
+        Contact our help desk <i class="bi bi-headset ms-2"></i>
+    </a>
+</div>
+
 {% endblock %}

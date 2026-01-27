@@ -6,7 +6,11 @@ from .forms import BookingForm
 
 
 def index(request):
-     return render(request, 'index.html')
+     dict_dept = {
+        'departments': Departments.objects.all(),
+        'doctors': Doctors.objects.all(),
+    }
+     return render(request, 'index.html', dict_dept)
 
 def about(request):
      return render(request, 'about.html')
