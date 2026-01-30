@@ -37,4 +37,4 @@ class Contact(models.Model):
     submited_on = models.DateField(auto_now=True)
 
     def __str__(self):
-        return f"{self.c_name} {slef.c_sub}"
+        return f"{self.c_name} {self.c_sub}"

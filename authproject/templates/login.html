@@ -9,8 +9,17 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
-        Hello world
+        <form method="POST">
+            {% for message in messages %}
+            <ul>
+                <li>{{ message }}</li>
+            </ul>
+            {% endfor %}
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <button type="submit">Login</button>
+        </form>
         <p>You don't have an accoung. please <a href="{% url 'register' %}">sign up</a>
-        <script src="" async defer></script>
     </body>
 </html>
